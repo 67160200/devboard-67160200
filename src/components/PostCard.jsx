@@ -1,4 +1,4 @@
-function PostCard({ title, body, isFavorite, onToggleFavorite }) {
+function PostCard({ post, isFavorite, onToggleFavorite }) {
   return (
     <div
       style={{
@@ -10,14 +10,15 @@ function PostCard({ title, body, isFavorite, onToggleFavorite }) {
       }}
     >
       <h3 style={{ margin: "0 0 0.5rem", color: "#1e40af" }}>
-        {title}
+        {post.title}
       </h3>
 
-      <p style={{ margin: "0 0 0.75rem", color: "#4a5568", lineHeight: 1.6 }}>
-        {body}
+      <p
+        style={{ margin: "0 0 0.75rem", color: "#4a5568", lineHeight: 1.6 }}
+      >
+        {post.body}
       </p>
 
-      {/* ปุ่มถูกใจ */}
       <button
         onClick={onToggleFavorite}
         style={{
