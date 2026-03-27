@@ -4,7 +4,7 @@ import LoadingSpinner from "./LoadingSpinner";
 
 const POSTS_PER_PAGE = 10;
 
-function PostList({ favorites, onToggleFavorite }) {
+function PostList() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,15 +16,12 @@ function PostList({ favorites, onToggleFavorite }) {
       setLoading(true);
       setError(null);
 
-      const res = await fetch(
-        "https://jsonplaceholder.typicode.com/posts"
-      );
-
+      const res = await fetch("https://jsonplaceholder.typicode.com/posts");
       if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
 
       const data = await res.json();
-      setPosts(data.slice(0, 20)); // ใช้ 20 รายการเหมือนเดิม
-      setCurrentPage(1); // โหลดใหม่ → กลับไปหน้าแรก
+      setPosts(data.slice(0, 20));
+      setCurrentPage(1);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -48,7 +45,6 @@ function PostList({ favorites, onToggleFavorite }) {
   );
 
   if (loading) return <LoadingSpinner />;
-
   if (error)
     return (
       <div style={{ color: "red", padding: "1rem" }}>
@@ -90,7 +86,7 @@ function PostList({ favorites, onToggleFavorite }) {
         value={search}
         onChange={(e) => {
           setSearch(e.target.value);
-          setCurrentPage(1); // ค้นหาใหม่ → กลับหน้าแรก
+          setCurrentPage(1);
         }}
         style={{
           width: "100%",
@@ -100,12 +96,7 @@ function PostList({ favorites, onToggleFavorite }) {
       />
 
       {paginatedPosts.map((post) => (
-        <PostCard
-          key={post.id}
-          post={post}
-          isFavorite={favorites.includes(post.id)}
-          onToggleFavorite={() => onToggleFavorite(post.id)}
-        />
+        <PostCard key={post.id} post={post} />
       ))}
 
       {/* Pagination */}
