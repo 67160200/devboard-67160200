@@ -2,13 +2,15 @@ import { useState, useEffect } from "react";
 import PostCard from "./PostCard";
 import LoadingSpinner from "./LoadingSpinner";
 
+const POSTS_PER_PAGE = 10;
+
 function PostList({ favorites, onToggleFavorite }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // ✅ แยก fetch logic ออกมา
   async function fetchPosts() {
     try {
       setLoading(true);
@@ -21,7 +23,8 @@ function PostList({ favorites, onToggleFavorite }) {
       if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
 
       const data = await res.json();
-      setPosts(data.slice(0, 20));
+      setPosts(data.slice(0, 20)); // ใช้ 20 รายการเหมือนเดิม
+      setCurrentPage(1); // โหลดใหม่ → กลับไปหน้าแรก
     } catch (err) {
       setError(err.message);
     } finally {
@@ -29,13 +32,19 @@ function PostList({ favorites, onToggleFavorite }) {
     }
   }
 
-  // ✅ โหลดครั้งแรกตอน mount
   useEffect(() => {
     fetchPosts();
   }, []);
 
   const filtered = posts.filter((post) =>
     post.title.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filtered.length / POSTS_PER_PAGE);
+
+  const paginatedPosts = filtered.slice(
+    (currentPage - 1) * POSTS_PER_PAGE,
+    currentPage * POSTS_PER_PAGE
   );
 
   if (loading) return <LoadingSpinner />;
@@ -49,6 +58,7 @@ function PostList({ favorites, onToggleFavorite }) {
 
   return (
     <div>
+      {/* Header + Reload */}
       <div
         style={{
           display: "flex",
@@ -59,7 +69,6 @@ function PostList({ favorites, onToggleFavorite }) {
       >
         <h3 style={{ margin: 0 }}>โพสต์ล่าสุด</h3>
 
-        {/* ✅ ปุ่มโหลดใหม่ */}
         <button
           onClick={fetchPosts}
           style={{
@@ -74,11 +83,15 @@ function PostList({ favorites, onToggleFavorite }) {
         </button>
       </div>
 
+      {/* Search */}
       <input
         type="text"
         placeholder="ค้นหาโพสต์..."
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => {
+          setSearch(e.target.value);
+          setCurrentPage(1); // ค้นหาใหม่ → กลับหน้าแรก
+        }}
         style={{
           width: "100%",
           padding: "0.5rem",
@@ -86,9 +99,7 @@ function PostList({ favorites, onToggleFavorite }) {
         }}
       />
 
-      {filtered.length === 0 && <p>ไม่พบโพสต์ที่ค้นหา</p>}
-
-      {filtered.map((post) => (
+      {paginatedPosts.map((post) => (
         <PostCard
           key={post.id}
           post={post}
@@ -96,6 +107,37 @@ function PostList({ favorites, onToggleFavorite }) {
           onToggleFavorite={() => onToggleFavorite(post.id)}
         />
       ))}
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "1rem",
+            marginTop: "1.5rem",
+          }}
+        >
+          <button
+            onClick={() => setCurrentPage((p) => p - 1)}
+            disabled={currentPage === 1}
+          >
+            ← ก่อนหน้า
+          </button>
+
+          <span>
+            หน้า {currentPage} / {totalPages}
+          </span>
+
+          <button
+            onClick={() => setCurrentPage((p) => p + 1)}
+            disabled={currentPage === totalPages}
+          >
+            ถัดไป →
+          </button>
+        </div>
+      )}
     </div>
   );
 }
