@@ -4,7 +4,7 @@ import PostCard from "./PostCard";
 function PostList({ posts, favorites, onToggleFavorite }) {
   const [search, setSearch] = useState("");
 
-  // กรองโพสต์ตาม search
+
   const filtered = posts.filter((post) =>
     post.title.toLowerCase().includes(search.toLowerCase()),
   );
@@ -21,7 +21,7 @@ function PostList({ posts, favorites, onToggleFavorite }) {
         โพสต์ล่าสุด
       </h2>
 
-      {/* Search Input */}
+      {}
       <input
         type="text"
         placeholder="ค้นหาโพสต์..."
@@ -38,14 +38,14 @@ function PostList({ posts, favorites, onToggleFavorite }) {
         }}
       />
 
-      {/* ถ้าไม่พบโพสต์ */}
+      {}
       {filtered.length === 0 && (
         <p style={{ color: "#718096", textAlign: "center", padding: "2rem" }}>
           ไม่พบโพสต์ที่ค้นหา
         </p>
       )}
 
-      {/* แสดงรายการโพสต์ */}
+      {}
       {filtered.map((post) => (
         <PostCard
           key={post.id}

@@ -2,8 +2,9 @@ import { useState } from "react";
 import Navbar from "./components/Navbar";
 import PostList from "./components/PostList";
 import UserCard from "./components/UserCard";
+import AddPostForm from "./components/AddPostForm";
 
-const POSTS = [
+const INITIAL_POSTS = [
   {
     id: 1,
     title: "React คืออะไร?",
@@ -34,6 +35,7 @@ const USERS = [
 
 function App() {
   const [favorites, setFavorites] = useState([]);
+  const [posts, setPosts] = useState(INITIAL_POSTS);
 
   function handleToggleFavorite(postId) {
     setFavorites((prev) =>
@@ -42,6 +44,18 @@ function App() {
         : [...prev, postId]
     );
   }
+
+  
+function handleAddPost({ title, body }) {
+  const newPost = {
+    id: Date.now(),
+    title,
+    body,
+  };
+
+  setPosts((prev) => [newPost, ...prev]);
+}
+
 
   return (
     <div>
@@ -57,14 +71,15 @@ function App() {
           gap: "2rem",
         }}
       >
-        {/* คอลัมน์ซ้าย */}
+        <AddPostForm onAddPost={handleAddPost} />
+        {}
         <PostList
-          posts={POSTS}
+          posts={posts}
           favorites={favorites}
           onToggleFavorite={handleToggleFavorite}
         />
 
-        {/* คอลัมน์ขวา */}
+        {}
         <div>
           <h2>สมาชิก</h2>
 
