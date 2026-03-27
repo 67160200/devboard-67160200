@@ -33,11 +33,14 @@ const USERS = [
 ];
 
 function App() {
-  // ✅ เตรียม state ไว้กัน error (Activity 1 ยังไม่ใช้ logic ถูกใจจริง)
   const [favorites, setFavorites] = useState([]);
 
-  function handleToggleFavorite() {
-    // จะมาเขียน logic ใน Activity 2–5
+  function handleToggleFavorite(postId) {
+    setFavorites((prev) =>
+      prev.includes(postId)
+        ? prev.filter((id) => id !== postId)
+        : [...prev, postId]
+    );
   }
 
   return (
@@ -54,24 +57,16 @@ function App() {
           gap: "2rem",
         }}
       >
-        {/* คอลัมน์ซ้าย: โพสต์ */}
+        {/* คอลัมน์ซ้าย */}
         <PostList
           posts={POSTS}
           favorites={favorites}
           onToggleFavorite={handleToggleFavorite}
         />
 
-        {/* คอลัมน์ขวา: สมาชิก */}
+        {/* คอลัมน์ขวา */}
         <div>
-          <h2
-            style={{
-              color: "#2d3748",
-              borderBottom: "2px solid #1e40af",
-              paddingBottom: "0.5rem",
-            }}
-          >
-            สมาชิก
-          </h2>
+          <h2>สมาชิก</h2>
 
           {USERS.map((user) => (
             <UserCard
