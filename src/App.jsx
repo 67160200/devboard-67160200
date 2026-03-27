@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Navbar from "./components/Navbar";
 import PostList from "./components/PostList";
 import UserCard from "./components/UserCard";
@@ -32,9 +33,17 @@ const USERS = [
 ];
 
 function App() {
+  // ✅ เตรียม state ไว้กัน error (Activity 1 ยังไม่ใช้ logic ถูกใจจริง)
+  const [favorites, setFavorites] = useState([]);
+
+  function handleToggleFavorite() {
+    // จะมาเขียน logic ใน Activity 2–5
+  }
+
   return (
     <div>
-      <Navbar />
+      <Navbar favoriteCount={favorites.length} />
+
       <div
         style={{
           maxWidth: "900px",
@@ -46,9 +55,11 @@ function App() {
         }}
       >
         {/* คอลัมน์ซ้าย: โพสต์ */}
-        <div>
-          <PostList posts={POSTS} />
-        </div>
+        <PostList
+          posts={POSTS}
+          favorites={favorites}
+          onToggleFavorite={handleToggleFavorite}
+        />
 
         {/* คอลัมน์ขวา: สมาชิก */}
         <div>
@@ -61,8 +72,13 @@ function App() {
           >
             สมาชิก
           </h2>
+
           {USERS.map((user) => (
-            <UserCard key={user.id} name={user.name} email={user.email} />
+            <UserCard
+              key={user.id}
+              name={user.name}
+              email={user.email}
+            />
           ))}
         </div>
       </div>
