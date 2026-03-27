@@ -34,9 +34,11 @@ const USERS = [
 ];
 
 function App() {
-  const [favorites, setFavorites] = useState([]);
+  // 🔹 state หลัก
   const [posts, setPosts] = useState(INITIAL_POSTS);
+  const [favorites, setFavorites] = useState([]);
 
+  // 🔹 toggle ถูกใจ
   function handleToggleFavorite(postId) {
     setFavorites((prev) =>
       prev.includes(postId)
@@ -45,17 +47,15 @@ function App() {
     );
   }
 
-  
-function handleAddPost({ title, body }) {
-  const newPost = {
-    id: Date.now(),
-    title,
-    body,
-  };
-
-  setPosts((prev) => [newPost, ...prev]);
-}
-
+  // 🔹 เพิ่มโพสต์ใหม่
+  function handleAddPost({ title, body }) {
+    const newPost = {
+      id: Date.now(),
+      title,
+      body,
+    };
+    setPosts((prev) => [newPost, ...prev]);
+  }
 
   return (
     <div>
@@ -71,17 +71,28 @@ function handleAddPost({ title, body }) {
           gap: "2rem",
         }}
       >
-        <AddPostForm onAddPost={handleAddPost} />
-        {}
-        <PostList
-          posts={posts}
-          favorites={favorites}
-          onToggleFavorite={handleToggleFavorite}
-        />
-
-        {}
+        {/* คอลัมน์ซ้าย */}
         <div>
-          <h2>สมาชิก</h2>
+          <AddPostForm onAddPost={handleAddPost} />
+
+          <PostList
+            posts={posts}
+            favorites={favorites}
+            onToggleFavorite={handleToggleFavorite}
+          />
+        </div>
+
+        {/* คอลัมน์ขวา */}
+        <div>
+          <h2
+            style={{
+              color: "#2d3748",
+              borderBottom: "2px solid #1e40af",
+              paddingBottom: "0.5rem",
+            }}
+          >
+            สมาชิก
+          </h2>
 
           {USERS.map((user) => (
             <UserCard
