@@ -1,5 +1,5 @@
 import Navbar from "./components/Navbar";
-import PostCard from "./components/PostCard";
+import PostList from "./components/PostList";
 const POSTS = [
   {
     id: 1,
@@ -29,14 +29,19 @@ const USERS = [
   { id: 3, name: "วิชาญ โค้ดเก่ง", email: "wichan@dev.com" },
 ];
 ``
+
+
 function App() {
   return (
     <div>
       <Navbar />
-      <PostCard title="ทดสอบ" body="นี่คือเนื้อหาทดสอบ" />
+      <div style={{ maxWidth: "900px", margin: "2rem auto" }}>
+        <PostList posts={POSTS} />
+      </div>
     </div>
   );
 }
 
 export default App;
+
 ``
